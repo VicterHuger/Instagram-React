@@ -1,5 +1,8 @@
+import React from 'react';
+
 function Post(props){
-    return (
+  
+  return (
         <div class="post">
               <div class="topo">
                 <div class="usuario">
@@ -12,13 +15,13 @@ function Post(props){
               </div>
 
               <div class="conteudo">
-                <img src={props.imagepost} alt=""/>
+                <img src={props.imagepost} alt="" onClick={props.imagefunction}/>
               </div>
 
               <div class="fundo">
                 <div class="acoes">
                   <div>
-                    <ion-icon name="heart-outline"></ion-icon>
+                    <ion-icon name={props.icon} onClick={props.iconfunction}></ion-icon>
                     <ion-icon name="chatbubble-outline"></ion-icon>
                     <ion-icon name="paper-plane-outline"></ion-icon>
                   </div>
@@ -37,28 +40,89 @@ function Post(props){
             </div>
     )
 }
+  
 export default function Posts(){
-    const posts=[
-        {
-            imageuser: "assets/img/meowed.svg",
-            user: "meowed",
-            imagepost: "assets/img/gato-telefone.svg",
-            imageuserlike: "assets/img/respondeai.svg",
-            userlike: "respondeai",
-            likes: "101.523"
-        },
-        {
-            imageuser: "assets/img/barked.svg",
-            user: "barked",
-            imagepost: "assets/img/dog.svg",
-            imageuserlike: "assets/img/adorable_animals.svg",
-            userlike: "adorable_animals",
-            likes: "99.159"
+
+  const posts=[
+    {
+        id:0,
+        imageuser: "assets/img/meowed.svg",
+        user: "meowed",
+        imagepost: "assets/img/gato-telefone.svg",
+        imageuserlike: "assets/img/respondeai.svg",
+        userlike: "respondeai",
+        iconlike: "heart-outline",
+        likes: 101.523
+    },
+    { 
+        id: 1,
+        imageuser: "assets/img/barked.svg",
+        user: "barked",
+        imagepost: "assets/img/dog.svg",
+        imageuserlike: "assets/img/adorable_animals.svg",
+        userlike: "adorable_animals",
+        iconlike: "heart-outline",
+        likes: 99.159
+    }
+];
+
+  const [list,setList]=React.useState(posts);
+  
+  function verifyLikeIcon(id){
+    let updatedPost;
+    const newposts = list.map( post => {
+      if (post.id === id) {
+        
+        if(post.iconlike ==="heart-outline"){
+
+           updatedPost = {
+            ...post,
+            iconlike: "heart",
+          };
+
+          return updatedPost;
+        
+        }else if(post.iconlike==="heart"){
+           updatedPost = {
+            ...post,
+            iconlike: "heart-outline",
+          };
+        
+          return updatedPost;
         }
-    ];
+        
+      }
+      return post;
+    });
+
+    setList(newposts);
+  }
+  function verifyLikePost(id){
+    let updatedPost;
+    const newposts = list.map( post => {
+      if (post.id === id) {
+        
+        if(post.iconlike ==="heart-outline"){
+
+           updatedPost = {
+            ...post,
+            iconlike: "heart",
+          };
+
+          return updatedPost;
+        
+        }
+        
+      }
+      return post;
+    });
+
+    setList(newposts);
+  }
+  
     return (
         <div class="posts">
-            {posts.map(post=><Post imageuser={post.imageuser} user={post.user} imagepost={post.imagepost} imageuserlike={post.imageuserlike} userlike={post.userlike} likes={post.likes}  />)}
+            {list.map( post => <Post imageuser={post.imageuser} user={post.user} imagepost={post.imagepost} iconfunction={()=>verifyLikeIcon(post.id)} imagefunction={()=>verifyLikePost(post.id)} icon={post.iconlike}  imageuserlike={post.imageuserlike} userlike={post.userlike} likes={post.likes}  />)}
         </div>
     );
 }
